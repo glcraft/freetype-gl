@@ -117,6 +117,11 @@ typedef struct kerning_t
  */
 typedef struct texture_glyph_t
 {
+
+	/**
+	* Index into the font.
+	*/
+	uint16_t index;
     /**
      * Unicode codepoint this glyph represents in UTF-32 LE encoding.
      */
@@ -380,8 +385,9 @@ typedef struct texture_font_t
  * Request a new glyph from the font. If it has not been created yet, it will
  * be.
  *
- * @param self      A valid texture font
- * @param codepoint Character codepoint to be loaded in UTF-8 encoding.
+ * @param self                      A valid texture font
+ * @param codepoint                 Character codepoint to be loaded in UTF-8 encoding.
+ * @param codepoint_is_glyph_index  Indicates that the codepoint parameter is the glyph index instead. (false by default)
  *
  * @return A pointer on the new glyph or 0 if the texture atlas is not big
  *         enough
@@ -389,21 +395,27 @@ typedef struct texture_font_t
  */
   texture_glyph_t *
   texture_font_get_glyph( texture_font_t * self,
-                          const char * codepoint );
+                          const char * codepoint);
 
+  texture_glyph_t *
+  texture_font_get_glyph_from_index( texture_font_t * self,
+	                                 uint16_t glyph_index);
 
 /**
  * Request the loading of a given glyph.
  *
  * @param self       A valid texture font
  * @param codepoints Character codepoint to be loaded in UTF-8 encoding.
+ * @param codepoint_is_glyph_index  Indicates that the codepoint parameter is the glyph index instead.
  *
  * @return One if the glyph could be loaded, zero if not.
  */
   int
   texture_font_load_glyph( texture_font_t * self,
-                           const char * codepoint );
-
+                           const char * codepoint, uint8_t codepoint_is_glyph_index);
+  int
+  texture_font_load_glyph_from_index( texture_font_t * self,
+		                              uint16_t glyph_index);
 /**
  * Request the loading of several glyphs at once.
  *
